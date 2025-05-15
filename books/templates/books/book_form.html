@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>
+    {% if view.action == 'create' %}Add New Book{% else %}Edit Book{% endif %}
+  </h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+    <a href="{% url 'books:list' %}">Cancel</a>
+  </form>
+{% endblock %}

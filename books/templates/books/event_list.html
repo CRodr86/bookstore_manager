@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load tz %}
+{% block content %}
+  <h1>📆 Global Restock Events</h1>
+
+  <section>
+    <h2>Pending Restock Events</h2>
+    {% if pending_events %}
+      <table>
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Scheduled for</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ev in pending_events %}
+            <tr>
+              <td>
+                <a href="{% url 'books:detail' ev.book.pk %}">
+                  {{ ev.book.title }}
+                </a>
+              </td>
+              <td>{{ ev.scheduled_for|localtime|date:"d/m/Y H:i" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No pending restock events.</p>
+    {% endif %}
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Executed Restock Events</h2>
+    {% if executed_events %}
+      <table>
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Quantity</th>
+            <th>Scheduled for</th>
+            <th>Executed at</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ev in executed_events %}
+            <tr>
+              <td>
+                <a href="{% url 'books:detail' ev.book.pk %}">
+                  {{ ev.book.title }}
+                </a>
+              </td>
+              <td style="text-align: center;">{{ ev.quantity }}</td>
+              <td>{{ ev.scheduled_for|localtime|date:"d/m/Y H:i" }}</td>
+              <td>{{ ev.executed_at|localtime|date:"d/m/Y H:i" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No executed restock events.</p>
+    {% endif %}
+  </section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load tz %}
+{% block content %}
+<h1>{{ book.title }}</h1>
+<p><em>by {{ book.author }}</em></p>
+<p>{{ book.description }}</p>
+{% if book.stock >= 1 %}
+<p style="color:green;">Price: {{ book.price }} € — Stock: {{ book.stock }}</p>
+{% else %}
+<p style="color:red;">Out of stock</p>
+{% endif %}
+
+<p></p>
+
+<form action="{% url 'books:buy' book.pk %}" method="post" style="display:inline;">
+  {% csrf_token %}
+  <label>
+    Quantity:
+    <input type="number" name="quantity" value="1" min="1" style="width:4rem;">
+  </label>
+  <button type="submit">Order stock</button>
+</form>
+
+<h2>Pending Restock Events</h2>
+<ul>
+  {% for ev in events %}
+  <li>🕒 {{ ev.quantity }}x {{ ev.book.title }} — scheduled for
+    {{ ev.scheduled_for|localtime|date:"d/m/Y H:i" }}
+  </li>
+  {% empty %}
+  <li>No pending restocks.</li>
+  {% endfor %}
+</ul>
+
+<p>
+  <a href="{% url 'books:update' book.pk %}">Edit</a> |
+  <a href="{% url 'books:delete' book.pk %}">Delete</a> |
+  <a href="{% url 'books:list' %}">Back to list</a>
+</p>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>📚 Books Inventory</h1>
+<p><a href="{% url 'books:create' %}">+ Add new book</a></p>
+<ul>
+  {% for book in books %}
+  <li>
+    <a href="{% url 'books:detail' book.pk %}">
+      <strong>{{ book.title }}</strong> by {{ book.author }}
+    </a>
+    {% if book.stock >= 1 %}
+    <span style="color:green;">Price: {{ book.price }} € — Stock: {{ book.stock }}</span>
+    {% else %}
+    <span style="color:red;">Out of stock</span>
+    {% endif %}
+
+
+  </li>
+  {% empty %}
+  <li>No books available.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
